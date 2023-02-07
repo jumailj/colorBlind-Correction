@@ -66,11 +66,11 @@ def GetImageFile():
     img2 = ImageTk.PhotoImage(Image.open(window.filename).resize((PreviewImageWidht,previewImageHeight)))
     print('[Log]: (file path) :' + CurrentImageDir )
 
-    #write the dir to a file
-    f = open('dir.txt', 'a')
-    f.truncate(0)
-    f.write(CurrentImageDir)
-    f.close()
+
+    global globalImageDir
+    globalImageDir = CurrentImageDir
+    print('Dir1: ', globalImageDir)
+
 
     #replace image default image with updated image;
     previewImage.configure(image=img2)
@@ -140,8 +140,9 @@ chooseImageLabel.grid(row=0,column=0)
 def GenerateSimulateImage():
     print('------------------------------')
     print('[Log] sim Button pressed')
-    f = open("dir.txt", 'r')
-    value = f.read()
+    value = globalImageDir
+
+
     print('[Log] Image dir:', value)
     print('[Log] Choosed Blindness: ', currentSimColorBlindnessValue.get())
     print('[Log] Degree Value: ', degreeSlider.get())
@@ -231,8 +232,9 @@ generateCrtImageTitle.grid(row=5, column=0,pady=10)
 def GenerateCorrectImage():
     print('------------------------------')
     print('[Log] sim Button pressed')
-    f = open("dir.txt", 'r')
-    value = f.read()
+
+    value = globalImageDir
+
     print('[Log] Image dir:', value)
     print('[Log] Choosed Blindness: ', currentColorCorrectionValue.get())
     print('[Log] Degree Value: ', CorrectionDegreeSlider.get())
