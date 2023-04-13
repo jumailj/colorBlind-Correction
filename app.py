@@ -11,8 +11,7 @@ previewImageHeight=205
 outputImageWidht = 1258
 outputImageHeight= 795
 
-
-window = Tk() #create new window;
+window = Tk() #create new window;~
 window.title('Color-Blindness') #window title;
 window.geometry('1640x820') #window size locked;
 window.configure(bg='#495057') # window background color;
@@ -23,7 +22,6 @@ img = ImageTk.PhotoImage(Image.open('default_out.jpg').resize((PreviewImageWidht
 
 #preview Output Image[Default]
 outputImage = ImageTk.PhotoImage(Image.open('default_out.jpg').resize((outputImageWidht,outputImageHeight)))
-
 
 frame = Frame(window) #create and define;
 frame.pack() #pack /place /grid -->layout managers;
@@ -142,6 +140,10 @@ def GenerateSimulateImage():
     print('[Log] sim Button pressed')
     value = globalImageDir
 
+    #image compression;
+    image = Image.open(value)
+    image.save("out-compressed.jpg", "JPEG", optimize=True, quality=100)
+
 
     print('[Log] Image dir:', value)
     print('[Log] Choosed Blindness: ', currentSimColorBlindnessValue.get())
@@ -164,9 +166,10 @@ def GenerateSimulateImage():
 
     print('    [ degree ]  :', DegreeValue*0.1)
 
-    # add algorithm and generate image;
-    Core.simulate(input_path = value,return_type= 'save',save_path='out.jpg',simulate_type= simColorValue_,simulate_degree_primary=DegreeValue*0.1)
 
+
+    # add algorithm and generate image;
+    Core.simulate(input_path = 'out-compressed.jpg',return_type= 'save',save_path='out.jpg',simulate_type= simColorValue_,simulate_degree_primary=DegreeValue*0.1)
 
     #update new image with help of filepath
     img2 = ImageTk.PhotoImage(Image.open('out.jpg').resize((outputImageWidht,outputImageHeight)))
@@ -235,6 +238,10 @@ def GenerateCorrectImage():
 
     value = globalImageDir
 
+    #image compression
+    image = Image.open(value)
+    image.save("out-compressed.jpg", "JPEG", optimize=True, quality=75)
+
     print('[Log] Image dir:', value)
     print('[Log] Choosed Blindness: ', currentColorCorrectionValue.get())
     print('[Log] Degree Value: ', CorrectionDegreeSlider.get())
@@ -247,6 +254,8 @@ def GenerateCorrectImage():
     if crtColorValue == 1:
         crtColorValue_ = 'protanopia'
         print('option 1 is selected and its protanopia')
+        #Core.simulate(input_path = value, return_type='save', save_path='out.jpg',protanopia_degree=0.9, deutranopia_degree = 0.0)
+        Core.correct(input_path="out-compressed.jpg",return_type='save',save_path='out.jpg',protanopia_degree= crtDegreeValue*0.1,deutranopia_degree=0.0)
     elif  crtColorValue == 2:
         crtColorValue_ = 'deutranopia'
         print('option 2 is selected and its deutranopia')
@@ -257,7 +266,7 @@ def GenerateCorrectImage():
     print('    [ degree ]  :', crtDegreeValue*0.1)
 
     # add algorithm and generate image;
-    Core.simulate(input_path = value,return_type= 'save',save_path='out.jpg',simulate_type= crtColorValue_,simulate_degree_primary=crtDegreeValue*0.1)
+    # Core.simulate(input_path = value,return_type= 'save',save_path='out.jpg',simulate_type= crtColorValue_,simulate_degree_primary=crtDegreeValue*0.1)
 
 
     #update new image with help of filepath
@@ -273,8 +282,6 @@ def GenerateCorrectImage():
 #generateSimImageButton[SimulatedColorBlindness]
 correctImageButton = Button(colorCorrectionFrame,text="Generate", command=GenerateCorrectImage, width=15) # changed, function
 correctImageButton.grid(row=6,pady=10)
-
-#todos add  image compression; - sugg.
 
 
 # start window;

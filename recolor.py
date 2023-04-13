@@ -13,7 +13,7 @@ class Core:
     def simulate(input_path: str,
                  simulate_type: str = 'protanopia',
                  simulate_degree_primary: float = 1.0,
-                 simulate_degree_sec: float = 1.0,
+                 simulate_degree_sec: float = 1.0, #just for hybrid.
                  return_type: str = 'save',
                  save_path: str = None):
         """
@@ -31,14 +31,18 @@ class Core:
             'Invalid Simulate Type: {}'.format(simulate_type)
 
         # Load the image file in LMS colorspace
-        img_lms = Utils.load_lms(input_path)
+        img_lms = Utils.load_lms(input_path) #converted lms image in array;
+
 
         if simulate_type == 'protanopia':
             transform = Transforms.lms_protanopia_sim(degree=simulate_degree_primary)
+            print(transform)
         elif simulate_type == 'deutranopia':
             transform = Transforms.lms_deutranopia_sim(degree=simulate_degree_primary)
+            print(transform)
         elif simulate_type == 'tritanopia':
             transform = Transforms.lms_tritanopia_sim(degree=simulate_degree_primary)
+            print(transform)
         else:
             transform = Transforms.hybrid_protanomaly_deuteranomaly_sim(degree_p=simulate_degree_primary,
                                                                         degree_d=simulate_degree_sec)
@@ -48,6 +52,7 @@ class Core:
 
         # Converting back to RGB colorspace
         img_sim = np.uint8(np.dot(img_sim, Transforms.lms_to_rgb()) * 255)
+        ####
 
         if return_type == 'save':
             assert save_path is not None, 'No save path provided.'

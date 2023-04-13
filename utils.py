@@ -10,13 +10,13 @@ class Transforms:
     """
 
     @staticmethod
-    def rgb_to_lms():
+    def rgb_to_lms(): #
         """
         Matrix for RGB color-space to LMS color-space transformation.
         """
         return np.array([[17.8824, 43.5161, 4.11935],
-          [3.45565, 27.1554, 3.86714], 
-          [0.0299566, 0.184309, 1.46709]]).T
+                         [3.45565, 27.1554, 3.86714], 
+                         [0.0299566, 0.184309, 1.46709]]).T
 
     @staticmethod
     def lms_to_rgb() -> np.ndarray:
@@ -28,7 +28,7 @@ class Transforms:
                          [-0.0004, -0.0041, 0.6935]]).T
 
     @staticmethod
-    def lms_protanopia_sim(degree: float = 1.0) -> np.ndarray:
+    def lms_protanopia_sim(degree: float = 1.0) -> np.ndarray: 
         """
         Matrix for Simulating Protanopia colorblindness from LMS color-space.
         :param degree: Protanopia degree.
@@ -85,13 +85,15 @@ class Utils:
     Couple of utils for loading the images.
     """
     @staticmethod
-    def load_rgb(path):
+    def load_rgb(path): #just load rgb image;
         img_rgb = np.array(Image.open(path)) / 255
         return img_rgb
 
     @staticmethod
-    def load_lms(path):
-        img_rgb = np.array(Image.open(path)) / 255
+    def load_lms(path): #load rgb image and convert to lms
+        img_rgb = np.array(Image.open(path)) / 255    #path of the raw image file
+        print(img_rgb)
         img_lms = np.dot(img_rgb[:,:,:3], Transforms.rgb_to_lms())
+        print(img_lms)
 
         return img_lms
